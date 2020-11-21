@@ -1,3 +1,5 @@
+// 입력된 정수값들 정렬하여 출력하기
+
 import java.util.Scanner;
 
 class Sort
@@ -9,7 +11,7 @@ class Sort
 	{
 		for(int i=0;i<a.length;i++)
 		{
-			System.out.print("����"+(i+1)+" = ");
+			System.out.print("Á¤¼ö"+(i+1)+" = ");
 			a[i] = sc.nextInt();
 		}
 	}
