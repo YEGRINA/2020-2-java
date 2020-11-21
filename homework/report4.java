@@ -1,3 +1,5 @@
+// ì˜¤ë²„ë¡œë”© ì‹¤ìŠµ
+
 import java.util.*;
 
 class Human
@@ -20,11 +22,11 @@ class Human
 	}
 	
 	public void output(int n) {
-		System.out.println("1. ÀÌ¸§: " + name);
+		System.out.println("1. ì´ë¦„: " + name);
 		if(n == 1) return;
-		System.out.println("2. »ı³â¿ùÀÏ: " + birth);
+		System.out.println("2. ìƒë…„ì›”ì¼: " + birth);
 		if(n == 2) return;
-		System.out.println("3. Ãâ»ıÁö: " + hometown);
+		System.out.println("3. ì¶œìƒì§€: " + hometown);
 		if(n == 3) return;
 	}
 		
@@ -37,33 +39,33 @@ public class report4 {
 		String name, birth, hometown;
 		Human h = null;
 		
-		System.out.print("ÀÔ·Â Ç×¸ñÀº ¸î °³ÀÔ´Ï±î? ");
+		System.out.print("ì…ë ¥ í•­ëª©ì€ ëª‡ ê°œì…ë‹ˆê¹Œ? ");
 		n = sc.nextInt();
 		
 		input : {
-			System.out.print("ÀÔ·Â1(ÀÌ¸§) = ");
+			System.out.print("ì…ë ¥1(ì´ë¦„) = ");
 			name = sc.next();
 			if(n == 1) {
 				h = new Human(name);
 				break input;
 			}
-			sc.nextLine(); // \n Á¦°Å
-			System.out.print("ÀÔ·Â2(»ı³â¿ùÀÏ) = ");
+			sc.nextLine(); // \n ì œê±°
+			System.out.print("ì…ë ¥2(ìƒë…„ì›”ì¼) = ");
 			birth = sc.nextLine();
 			if(n == 2) {
 				h = new Human(name, birth);
 				break input;
 			}
-			System.out.print("ÀÔ·Â3(Ãâ»ıÁö) = ");
+			System.out.print("ì…ë ¥3(ì¶œìƒì§€) = ");
 			hometown = sc.nextLine();
 			if(n == 3) {
 				h = new Human(name, birth, hometown);
 				break input;
 			}
 		}
-		System.out.println("\n°´Ã¼°¡ »ı¼ºµÇ¾ú½À´Ï´Ù.\n");
+		System.out.println("\nê°ì²´ê°€ ìƒì„±ë˜ì—ˆìŠµë‹ˆë‹¤.\n");
 		
-		System.out.println("°´Ã¼Á¤º¸");
+		System.out.println("ê°ì²´ì •ë³´");
 		h.output(n);
 		
 		sc.close();
