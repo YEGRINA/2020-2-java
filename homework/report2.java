@@ -1,3 +1,5 @@
+// í˜„ê¸ˆ ê³„ì‚° í”„ë¡œê·¸ë¨
+
 import java.util.Scanner;
 public class report2 {
 
@@ -7,7 +9,7 @@ public class report2 {
 		int money, fiftyThousand, tenThousand, oneThousand;
 		int fiveHundred, oneHundred, ten, one;
 		
-		System.out.print("±İ¾×À» ÀÔ·ÂÇÏ¼¼¿ä:");
+		System.out.print("ê¸ˆì•¡ì„ ì…ë ¥í•˜ì„¸ìš”:");
 		money=sc.nextInt();
 		
 		fiftyThousand=money/50000;
@@ -23,13 +25,13 @@ public class report2 {
 		ten=money/10;
 		one=money%10;
 		
-		System.out.println("¿À¸¸¿ø:"+fiftyThousand);
-		System.out.println("¸¸¿ø:"+tenThousand);
-		System.out.println("Ãµ¿ø:"+oneThousand);
-		System.out.println("¿À¹é¿ø:"+fiveHundred);
-		System.out.println("¹é¿ø:"+oneHundred);
-		System.out.println("½Ê¿ø:"+ten);
-		System.out.println("ÀÏ¿ø:"+one);
+		System.out.println("ì˜¤ë§Œì›:"+fiftyThousand);
+		System.out.println("ë§Œì›:"+tenThousand);
+		System.out.println("ì²œì›:"+oneThousand);
+		System.out.println("ì˜¤ë°±ì›:"+fiveHundred);
+		System.out.println("ë°±ì›:"+oneHundred);
+		System.out.println("ì‹­ì›:"+ten);
+		System.out.println("ì¼ì›:"+one);
 
 	}
 
