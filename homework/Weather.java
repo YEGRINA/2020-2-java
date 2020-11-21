@@ -1,4 +1,4 @@
-# 날씨 뉴스 프로그램
+//날씨 뉴스 프로그램
 
 import java.util.Scanner;
 
