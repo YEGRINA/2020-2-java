@@ -5,18 +5,50 @@ import javax.swing.*;
 import javax.swing.filechooser.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import java.awt.event.*;
 import java.awt.image.*;
 import java.awt.*;
 import java.awt.Graphics;
 
+class Photo {
+	String name;
+	String text;
+	int width;
+	int height;
+	
+	public Photo() {
+		name = null;
+		text = null;
+	}
+	
+	// this의 name과 입력받은 name이 같은지 확인하는 함수
+	public boolean equal(String name) {
+		if(this.name == name)
+			return true;
+		return false;
+	}
+}
+
+class Info extends JFrame {
+	public Info() {
+		setSize(700,750);
+		setTitle("앨범");
+		setLocationRelativeTo(null);  // 화면 중앙에 위치시킴
+		setLayout(new GridLayout(2,0));
+		setVisible(true);
+	}
+}
 class Frame extends JFrame {
 	// 이미지 라벨 배열을 위한 건데 암튼 실패라,,
 //	JLabel[] imageLabel = new JLabel[300];  // 이미지 추가를 위한 빈 라벨
 //	int image_num = 0;
 //	ImageIcon[] image = new ImageIcon[300];
 	Container container;
+	
+	Photo[] photo = new Photo[9];
+//	int photo_num = 0;
 	
 	JLabel imageLabel1 = new JLabel();
 	JLabel imageLabel2 = new JLabel();
@@ -93,8 +125,9 @@ class Frame extends JFrame {
 		JMenu searchMenu = new JMenu("검색");
 		JMenu addDeleteMenu = new JMenu("추가/삭제");
 		JMenu editMenu = new JMenu("편집");
-		JMenuItem [] menuItem = new JMenuItem[6];
-		String[] itemTitle = {"컴퓨터에서 검색", "앨범에서 검색","추가","삭제","텍스트 추가","필터"};
+		JMenu lookMenu = new JMenu("보기");
+		JMenuItem [] menuItem = new JMenuItem[8];
+		String[] itemTitle = {"컴퓨터에서 검색", "앨범에서 검색","추가","삭제","텍스트 추가","필터","사진 정보","도움말"};
 		
 		MenuActionListener mal = new MenuActionListener();
 		for(int i=0;i<menuItem.length;i++) {
@@ -106,10 +139,13 @@ class Frame extends JFrame {
 				addDeleteMenu.add(menuItem[i]);
 			else if(i < 6)
 				editMenu.add(menuItem[i]);
+			else if(i < 8)
+				lookMenu.add(menuItem[i]);
 		}
 		mb.add(searchMenu);
 		mb.add(addDeleteMenu);
 		mb.add(editMenu);
+		mb.add(lookMenu);
 		
 		setJMenuBar(mb);
 	}
@@ -135,6 +171,12 @@ class Frame extends JFrame {
 				break;
 			case "필터":
 				filter();
+			case "사진 정보":
+				imageInfo();
+				break;
+			case "도움말":
+				help();
+				break;
 			}
 		}
 	}
@@ -146,8 +188,9 @@ class Frame extends JFrame {
 		JFileChooser fc = new JFileChooser();
 		fc.showOpenDialog(null);
 		BufferedImage image_ = null;
-		int width, height;  // 저장할 크기
-		String name;  // 저장할 이름
+//		int width, height;  // 저장할 크기
+		String name = null;  // 저장할 이름
+		int photo_num = 0;
 		
 		// 필터 작동 안함 왜지,,,?
 //		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & PNG File", "jpg", "png");  // filter 확장자 추가
@@ -158,7 +201,7 @@ class Frame extends JFrame {
 		File file = fc.getSelectedFile();
 		name = file.getName();
 		
-		image_name[image_name_num++] = name;
+//		image_name[image_name_num++] = name;
 		createLabel(file);
 		
 		// 이미지라벨 배열로 만드는거 실패,,
@@ -178,11 +221,21 @@ class Frame extends JFrame {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		width = image_.getWidth();
-		height = image_.getHeight();	
+		
+		for(int i=0;i<9;i++) {
+			if(photo[i].equal(name)) {
+				photo[i].width = image_.getWidth();
+				photo[i].height = image_.getHeight();
+				photo_num = i;
+				break;
+			}
+		}
+		
+//		width = image_.getWidth();
+//		height = image_.getHeight();	
 		// 이미지 저장
 		try {
-			BufferedImage bufferedimage = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+			BufferedImage bufferedimage = new BufferedImage(photo[photo_num].width,photo[photo_num].height,BufferedImage.TYPE_INT_RGB);
 			bufferedimage.createGraphics().drawImage(image_, 0,0,null);
 			ImageIO.write(bufferedimage, "jpg", new File("C:/Users/syn58/Desktop/2020-2학기/객체지향프로그래밍설계/Project/album/image/"+name));
 		}
@@ -201,10 +254,18 @@ class Frame extends JFrame {
 		if(file.exists()) {
 			file.delete();
 		}
+		else return;
+		for(int i=0;i<9;i++) {
+			if(photo[i].equal(choice)) {
+				photo[i].name = null;
+				photo[i].text = null;
+				break;
+			}
+		}
 		loadImage();
 	}
 	
-	// 라벨(이미지)에 텍스트 추가하는 함수
+	// 사진 선택 후 텍스트 입력하는 함수
 	void addText() {
 		String choice, text = null;
 		choice = (String) JOptionPane.showInputDialog(null, "텍스트를 추가할 사진을 선택하세요", "사진 선택", JOptionPane.PLAIN_MESSAGE, null, image_name, image_name[0]);
@@ -212,6 +273,12 @@ class Frame extends JFrame {
 		if(file.exists()) {
 			text = JOptionPane.showInputDialog(null, "텍스트를 입력하세요", "텍스트 추가",JOptionPane.PLAIN_MESSAGE);
 			JOptionPane.showMessageDialog(null, text, "입력된 텍스트", JOptionPane.PLAIN_MESSAGE);
+		}
+		for(int i=0;i<9;i++) {
+			if(photo[i].name == choice) {
+				photo[i].text = text;
+				break;
+			}
 		}
 	}
 	
@@ -221,6 +288,63 @@ class Frame extends JFrame {
 		choice = (String) JOptionPane.showInputDialog(null, "필터를 적용할 사진을 선택하세요", "사진 선택", JOptionPane.PLAIN_MESSAGE, null, image_name, image_name[0]);
 		File file = new File("C:/Users/syn58/Desktop/2020-2학기/객체지향프로그래밍설계/Project/album/image/"+choice);
 		
+	}
+	
+	// 사진의 저장된 정보를 확인하는 함수
+	void imageInfo() {
+//		ImageIcon icon;
+		String choice;
+		choice = (String) JOptionPane.showInputDialog(null, "정보를 확인할 사진을 선택하세요", "사진 선택", JOptionPane.PLAIN_MESSAGE, null, image_name, image_name[0]);
+		File file = new File("C:/Users/syn58/Desktop/2020-2학기/객체지향프로그래밍설계/Project/album/image/"+choice);
+//		icon = new ImageIcon(file.getPath());
+
+		// 아이콘 사이즈를 조절하기 위해 필요한 변수
+		Image origin_image, resize_image;
+		ImageIcon origin_icon, resize_icon;
+		// 아이콘 사이즈 조절
+		origin_icon = new ImageIcon(file.getPath());
+		origin_image = origin_icon.getImage();
+		
+				
+//		JPanel panel = new JPanel();
+//		panel.setSize(new Dimension(200,200));
+//		panel.setLayout(null);
+		
+		for(int i=0;i<9;i++) {
+			if(photo[i].name == choice) {
+//				JOptionPane.showMessageDialog(null, "사진 이름 : " + photo[i].name + "\n입력된 텍스트 : " + photo[i].text, "사진 정보", JOptionPane.PLAIN_MESSAGE, icon);
+//				UIManager.put("OptionPane.mininumsSize", new Dimension(300,120));
+//				JOptionPane.showMessageDialog(null, panel, "사진 정보", JOptionPane.PLAIN_MESSAGE);
+//				int width = photo[i].width, height = photo[i].height;
+				resize_image = origin_image.getScaledInstance(600, 400, Image.SCALE_SMOOTH);
+				resize_icon = new ImageIcon(resize_image);
+				
+				JLabel label1 = new JLabel();
+				JLabel label2 = new JLabel();
+				label1.setIcon(resize_icon);
+				label2.setText("사진 이름 : " + photo[i].name + "\n입력된 텍스트 : " + photo[i].text);
+//				label2.setText("입력된 텍스트 : " + photo[i].text);
+//				label1.setBounds(0,0,200,60);
+//				label1.set
+				label1.setHorizontalAlignment(SwingConstants.CENTER);
+				label2.setHorizontalAlignment(SwingConstants.CENTER);
+//				panel.add(label);
+				
+				Info info = new Info();
+				info.add(label1);
+				info.add(label2);
+				break;
+			}
+		}
+	}
+	
+	// 사용방법을 확인할 수 있는 함수
+	void help() {
+		JOptionPane.showMessageDialog(null, "컴퓨터에서 검색 : 컴퓨터 내 저장된 사진을 ___를 통해 검색할 수 있습니다\n"
+				+ "앨범에서 검색 : 앨범에 저장된 사진을 ____를 통해 검색할 수 있습니다\n추가 : 사진을 컴퓨터에서 찾아 추가할 수 있습니다\n"
+				+ "삭제 : 앨범 내 저장된 사진을 선택하여 삭제할 수 있습니다\n텍스트 추가 : 텍스트를 추가할 사진을 고르고 텍스트를 입력하면 추가됩니다\n"
+				+ "필터 : \n사진 정보 : 사진 이름과 입력된 텍스트를 확인할 수 있습니다"
+				,"도움말",JOptionPane.PLAIN_MESSAGE);
 	}
 	
 	// 이미지 라벨을 만드는 함수
@@ -239,7 +363,6 @@ class Frame extends JFrame {
 	
 	// 라벨에 이미지 삽입
 	void inputImage(ImageIcon resize_icon) {  
-		
 		if(imageLabel1.getIcon() == null)
 			imageLabel1.setIcon(resize_icon);
 		else if(imageLabel2.getIcon() == null)
@@ -272,7 +395,9 @@ class Frame extends JFrame {
 		for(File f:file) {
 			createLabel(f);
 			name = f.getName();
-			image_name[image_name_num++] = name;
+			image_name[image_name_num] = name;
+			photo[image_name_num] = new Photo();
+			photo[image_name_num++].name = name;
 		}
 	}
 	
